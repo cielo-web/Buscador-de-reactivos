@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Reactivos</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: url('fondo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: red;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .contenedor {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      color: #ff80df;
+      font-size: 2.2em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #80b3ff;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 100%;
+      font-size: 1em;
+      border: 2px solid #ff80df;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+
+    #sugerencias {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 150px;
+      overflow-y: auto;
+      background: #fff;
+      color: #000;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    #sugerencias li {
+      padding: 8px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    #sugerencias li:hover {
+      background-color: #f0f0f0;
+    }
+
+    .resultado {
+      font-size: 1.2em;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      display: none;
+      animation: fadeIn 1s ease-in-out forwards;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      color: #2c3e50;
+    }
+
+    .resultado span {
+      color: #d4af37;
+      font-weight: bold;
+    }
+
+    .resultado a {
+      display: block;
+      margin-top: 10px;
+      color: #1a73e8;
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media screen and (max-width: 600px) {
+      .contenedor {
+        width: 90%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h1>🔬 Buscador de Reactivos</h1>
+    <h2>Escribe mi nombre y encuéntrame</h2>
+    <input type="text" id="buscador" placeholder="Ej: Ácido clorhídrico" onkeyup="buscarReactivo()" autocomplete="off" />
+    <ul id="sugerencias"></ul>
+    <div id="resultado" class="resultado"></div>
+  </div>
+
+  <script>
+    const data = {
+      "1. Pentanodiona": "HELADERA",
+      "2. Resorcina monosodico": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "3. Acetaldehido": "HELADERA",
+      "4. Acetato de Amonio": "E2-N1-B1",
+      "5. Acetato de Etilo": "HELADERA",
+      "6. Acetato de Isoamilo": "HELADERA",
+      "Acetato de Sodio": "E1-N2-B2",
+      "7. Acido Acetico glacial": "E3-N1-B1",
+      "8. Acido Ascorbico": "E2-N3-B1",
+      "Acido Borico": "E2-N2-B1",
+      "9. Acido Calcon carboxílico": "E2-N2-B2",
+      "10. Acido citrico": "E2-N3-B1",
+      "11. Acido Clorhidrico": "E3-N3-B1",
+      "Acido Isovalerico": "E6-N2-B1",
+      "Acido Lactico": "E3-N4-B1",
+      "12. Acido Nitrico": "E3-N5-B1",
+      "13. Acido Oxalico": "E2-N3-B1",
+      "14. Acido Sulfurico": "E3-N2-B1",
+      "15. Acido Tanico": "E2-N2-B1",
+      "16. Acido Tiobarbiturico": "E2-N3-B1",
+      "18. Alcohol Isoamilico": "HELADERA",
+      "17. Agua Para Cromatografia": "E4-N3-B1",
+      "19. Alcohol Isobutilico Isobutanol": "HELADERA",
+      "20. Alcohol Rectificado": "E4-N4-B1",
+      "21. Almidon Soluble": "E1-N4-B2",
+      "Anisol": "E5-N4-B2",
+      "22. Azul de Metileno": "E2-N2-B2",
+      "Benzaldehido": "E5-N4-B2",
+      "23. Bicarbonato de Sodio": "E1-N2-B1",
+      "24. Bisulfito de Sodio": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "25. Buffer PH 10": "E4-N2-B1",
+      "26. Buffer PH 4": "E4-N2-B1",
+      "27. Buffer PH 7": "E4-N2-B1",
+      "28. Butanodiona": "HELADERA",
+      "29. Butanol": "HELADERA",
+      "Carbon Activado": "⚠️ Ubicación no registrada. Consultar al responsable.",	
+      "Carbonato de calcio": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "Carbonato de sodio Anhidro": "E1-N2-B2",
+      "Carbonato de sodio monohidratado": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "30. Citrato de Amonio Ferrico": "E2-N1-B1",
+      "Clorhidrato de Hidroxilamina": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "31. Cloruro de Amonio": "E1-N3-B1",
+      "32. Cloruro de Bario di Hidratado": "E1-N4-B1",
+      "33. Cloruro de Calcio Dihidrato": "E1-N4-B1",
+      "Cloruro de Magnesio Hexahidrato": "E1-N4-B1",
+      "34. Cloruro de Mercurio": "E6-N3-B2",
+      "35. Cloruro de Potasio": "E1-N1-B1",
+      "36. Cloruro de sodio": "E1-N2-B1",
+      "37. Cromato de Potasio": "E1-N1-B1",
+      "38. Detergente Neutro": "Sobre Batea",	
+      "Disodio hidrogenofosfato dodecahidrato": "E1-N2-B1",
+      "39. Diclorofenol": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "40. Dicromato de Potasio": "E1-N1-B1",
+      "41. Dimetil Sulfuro (DMS)": "HELADERA",
+      "42. Ditionito de Sodio Purificado": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "43. EDTA Disodica": "E2-N2-B2",
+      "44. Etanol Alcohol Etilico": "E5-N5-B2",
+      "Eugenol": "E6-N2-B1",
+      "45. Fenantrolina": "E2-N1-B1",
+      "46. Fenolftaleina": "E2-N2-B2",
+      "47. Formaldehido Solucion": "E4-N1-B1",
+      "48. Fosfato Dibasico de Sodio Heptahidrato": "⚠️ Ubicación no registrada. Consultar al    responsable.",	  
+      "49. Fructuosa": "E6-N3-B1",
+      "51. Glicina": "E2-N1-B1",
+      "Heptamolibdato de Amonio tetrahidrato": "E2-N1-B1",
+      "Hexanoato de etilo": "HELADERA",
+      "52. Hexanodiona": "HELADERA",
+      "Hidrogeno Sulfito de Sodio": "E4-N3-B1",
+      "54. Hidroxido de Sodio": "E1-N2-B1",
+      "55. Hipoclorito de sodio": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "57. Iodo en Solucion": "E6-N4-B2",
+      "Iodo Resublimado": "E2-N2-B2",
+      "58. Isooctano": "E5-N6-B1,B2",
+      "Katalysatongemison": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "Kit Ferrover": "⚠️ Ubicación no registrada. Consultar al responsable.",	
+      "Kit Sulfaver": "⚠️ Ubicación no registrada. Consultar al responsable.",	
+      "59. Metanol": "E4-N4-B1",
+      "Metil Butanol": "E5-N4-B1",
+      "60. Metil 2 pirrolidona": "E4-N3-B1",
+      "61. Naranja de Metilo": "E2-N2-B2",
+      "62. Negro de Eriocromo": "E2-N2-B2",
+      "63. Ninhidrina": "E6-N3-B1",
+      "Nitrato de Mercurio": "E1-N4-B2",
+      "64. Nitrato de Plata": "E1-N4-B2",
+      "Nitrato de Potasio": "E1-N1-B1",
+      "Nitrato Silver": "E1-N4-B22",
+      "65. Octanol": "E5-N5-B1",
+      "Oxalato de Disodio": "⚠️ Ubicación no registrada. Consultar al responsable.",	
+      "Pastillas de Sulfato de Cobre": "⚠️ Ubicación no registrada. Consultar al responsable.",	
+      "67. Permanganato de Potasio": "E1-N1-B1",
+      "68. Peroxido de Hidrogeno": "E3-N4-B1",
+      "Polivinilpolipirrolidona": "E1-N4-B2",
+      "69. Potasio Dihidrogeno Fosfato": "E6-N3-B1",
+      "70. Potasio y Sodio tartrato tetrahidrato": "E1-N1-B1",
+      "71. Propanol": "HELADERA",
+      "66. Pararosanilina": "E2-N3-B1",
+      "72. Reactivo de Cloro Libre y Cloro Total": "E2-N3-B2",
+      "Reactivo de Molibdato 3 silice": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "73. Rojo de Metilo": "E2-N2-B2",
+      "74. Sacarosa": "E2-N1-B1",
+      "75. Sodio Carboxymethyl cellulose CMC": "E1-N2-B1",
+      "Sodio hidrogenocarbonato": "E1-N2-B2",
+      "76. Solucion de Amonio": "E3-N1-B1",
+      "Solución de Manganeso": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "78. Suero Fisiologico": "E4-N5",
+      "Sulfato de Aluminio y Potasio dodecahidrato": "E1-N1-B1",
+      "79. Sulfato de Amonio": "E1-N3-B2",
+      "Sulfato de Amonio y Fe Dodecahidrato": "E1-N3-B1",
+      "Sulfato de Amonio y Fe Hexahidratado": "E1-N3-B1",
+      "80. Sulfato de Cobre Pentahidratado": "E1-N4-B1",
+      "81. Sulfato de hierro heptahidrato": "E1-N4-B2",
+      "Sulfato de Potasio": "E1-N1-B2",
+      "Sulfato de Zinc heptahidratado": "E6-N4-B2",
+      "82. Sulfuro etil Metil": "⚠️ Ubicación no registrada. Consultar al responsable.",	
+      "83. Tiosulfato de Sodio": "E1-N2-B2",
+      "Trans-2-nonenal": "E6-N2-B1",
+      "84. Verde de Bromocresol": "E2-N2-B2",
+      "56. Yodato de Potasio": "E1-N1-B2",
+      "85. Yoduro de Potasio": "E1-N1-B2",
+      "53. Hidroxido de potasio": "E1-N1-B1",
+      "77. Solucion de hidroxido de sodio": "⚠️ Ubicación no registrada. Consultar al responsable.",
+      "50. Gelatina de pescado": "HELADERA 1", 
+
+
+
+    };
+
+    function normalizar(texto) {
+      return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    }
+
+    function buscarReactivo() {
+      const entrada = document.getElementById("buscador").value;
+      const normalizada = normalizar(entrada);
+      const resultado = document.getElementById("resultado");
+      const sugerencias = document.getElementById("sugerencias");
+      sugerencias.innerHTML = "";
+
+      if (entrada.trim() === "") {
+        resultado.style.display = "none";
+        return;
+      }
+
+      const coincidencias = Object.keys(data).filter(nombre =>
+        normalizar(nombre).includes(normalizada)
+      );
+
+      coincidencias.slice(0, 10).forEach(nombre => {
+        const li = document.createElement("li");
+        li.textContent = nombre;
+        li.onclick = () => {
+          document.getElementById("buscador").value = nombre;
+          sugerencias.innerHTML = "";
+          mostrarResultado(nombre);
+        };
+        sugerencias.appendChild(li);
+      });
+
+      if (coincidencias.length === 1 && normalizada === normalizar(coincidencias[0])) {
+        mostrarResultado(coincidencias[0]);
+      } else {
+        resultado.style.display = "none";
+      }
+    }
+
+    function mostrarResultado(nombre) {
+      const resultado = document.getElementById("resultado");
+      const ubicacion = data[nombre];
+      let mensaje = "";
+
+      if (ubicacion.toLowerCase().includes("no registrada")) {
+        mensaje = `⚠️ La ubicación del reactivo <span>${nombre}</span> no está registrada. Consultar al responsable.`;
+      } else {
+        mensaje = `📦 El reactivo <span>${nombre}</span> se encuentra en <span>${ubicacion}</span>.`;
+      }
+
+      // Generar nombre de archivo PDF
+      const nombreArchivo = nombre.replace(/\s+/g, '_').toLowerCase() + ".pdf";
+      const enlacePDF = `<a href="pdf/${nombreArchivo}" target="_blank">📄 Ver hoja de seguridad de ${nombre}</a>`;
+
+      resultado.innerHTML = mensaje + enlacePDF;
+      resultado.style.display = "block";
+    }
+  </script>
+</body>
+</html>
