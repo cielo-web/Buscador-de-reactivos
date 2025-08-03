@@ -295,10 +295,12 @@
       // Generar nombre de archivo PDF
       const nombreArchivo = nombre.replace(/\s+/g, '_').toLowerCase() + ".pdf";
       const enlacePDF = `<a href="${nombreArchivo}" target="_blank">📄 Ver hoja de seguridad de ${nombre}</a>`;
-
+      const infoLink = `<a href="informacion.html?nombre=${encodeURIComponent(nombre)}">🔍 Información del ${nombre}</a>`;
+      
       resultado.innerHTML = mensaje + enlacePDF;
       resultado.style.display = "block";
     }
   </script>
 </body>
 </html>
+
