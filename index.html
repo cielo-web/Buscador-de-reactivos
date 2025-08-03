@@ -297,11 +297,12 @@
       const enlacePDF = `<a href="${nombreArchivo}" target="_blank">📄 Ver hoja de seguridad de ${nombre}</a>`;
       const infoLink = `<a href="informacion.html?nombre=${encodeURIComponent(nombre)}">🔍 Información del ${nombre}</a>`;
       
-      resultado.innerHTML = mensaje + '<br>' + enlacePDF + infoLink;
+      resultado.innerHTML = mensaje + '<br>' + enlacePDF + '<br>' + infoLink;
       resultado.style.display = "block";
     }
   </script>
 </body>
 </html>
+
 
 
