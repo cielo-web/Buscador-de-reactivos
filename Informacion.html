@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha del Reactivo</title>
+  <style>
+
+  body {
+    background: url('fondo-reactivo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .contenedor {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  h1 {
+    font-size: 30px;
+    color: #ffffff;
+    margin-bottom: 25px;
+    text-align: center;
+    text-shadow: 0 1px 3px #000;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  strong {
+    color: #f063f7;
+  }
+
+  .volver {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 24px;
+    background-color: #a6286b;
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .volver:hover {
+    background-color: #d452d7;
+    transform: scale(1.05);
+  }
+</style>
+  </style>
+</head>
+<body>
+  <div class="contenedor" id="contenido">
+    <h1 id="tituloReactivo">Ficha del Reactivo</h1>
+    <p><strong>Análisis donde se usa:</strong> <span id="analisis"></span></p>
+    <p><strong>Cantidad de stock recomendado:</strong> <span id="stock"></span></p>
+    <p><strong>Observaciones:</strong> <span id="observaciones"></span></p>
+    <p><strong>Unidad de medida:</strong> <span id="medida"></span></p>
+    <p><strong>Tiempo de Llegada:</strong> <span id="llegada"></span></p>
+    <p><strong>Codigo SAP:</strong> <span id="codigo"></span></p>
+    <p><strong>Frecuencia de Uso:</strong> <span id="frecuencia"></span></p>
+
+    <a href="#" class="volver" onclick="history.back(); return false;">⬅ Volver al Buscador</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const nombreOriginal = params.get('nombre') || '';
+
+    function normalizar(texto) {
+      return texto.normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .toLowerCase()
+                  .trim();
+    }
+
+    const nombreNormalizado = normalizar(nombreOriginal);
+
+    const datosReactivos = {
+      "1. pentanodiona": {
+        nombreMostrar: "1. Pentanodiona",
+        analisis: "Para cromatografia",
+        stock: "1 frasco de 100 mL",
+        observaciones: "Almacenar en refrigeración",
+        medida: "ml",
+        llegada: "Inmediata",
+        codigo: "123",
+        frecuencia: "Semanal"
+      },
+
+      "11. acido clorhidrico": {
+        nombreMostrar: "Ácido Clorhídrico",
+        analisis: "Titulaciones",
+        stock: "3 botellas de 1L",
+        observaciones: "Corrosivo, usar guantes",
+        medida: "ml",
+        llegada: "Inmediata",
+        codigo: "123",
+        frecuencia: "Semanal"
+      },
+    };
+
+    const info = datosReactivos[nombreNormalizado];
+
+    if (info) {
+      document.getElementById('tituloReactivo').textContent = `Ficha del reactivo: ${info.nombreMostrar}`;
+      document.getElementById('analisis').textContent = info.analisis;
+      document.getElementById('stock').textContent = info.stock;
+      document.getElementById('observaciones').textContent = info.observaciones;
+      document.getElementById('medida').textContent = info.medida;
+      document.getElementById('llegada').textContent = info.llegada;
+      document.getElementById('codigo').textContent = info.codigo;
+      document.getElementById('frecuencia').textContent = info.frecuencia;
+    } else {
+      document.getElementById('contenido').innerHTML = `
+        <h1>Reactivo no encontrado</h1>
+        <p>No se encontró información para "${nombreOriginal}".</p>
+        <a href="#" class="volver" onclick="history.back(); return false;">⬅ Volver al Buscador</a>
+      `;
+    }
+  </script>
+</body>
+</html>
