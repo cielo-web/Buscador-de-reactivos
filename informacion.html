@@ -68,7 +68,6 @@
     transform: scale(1.05);
   }
 </style>
-  </style>
 </head>
 <body>
   <div class="contenedor" id="contenido">
@@ -93,6 +92,7 @@
                   .trim();
     }
 
+    
     const datosReactivos = {
       "1. pentanodiona": {
         nombreMostrar: "1. Pentanodiona",
@@ -980,25 +980,29 @@
 
     };
 
-    const nombreNormalizado = normalizar(nombreOriginal);
-const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave) === nombreNormalizado);
-const reactivo = datosReactivos[claveCoincidente];
+
+  const nombreNormalizado = normalizar(nombreOriginal);
+  const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave).includes(nombreNormalizado);
+
+const info = claveCoincidente ? datosReactivos[claveCoincidente] : null;
+
     
     if (info) {
-      document.getElementById('nombre-reactivo').textContent = = claveCoincidente || "Reactivo no encontrado";;
+      document.getElementById('nombre-reactivo').textContent = info.nombreMostrar;
       document.getElementById('analisis').textContent = info.analisis;
-      document.getElementById('stock').textContent = info.stock;
-      document.getElementById('observaciones').textContent = info.observaciones;
       document.getElementById('medida').textContent = info.medida;
+      document.getElementById('stock').textContent = info.stock;
       document.getElementById('frecuencia').textContent = info.frecuencia;
+      document.getElementById('observaciones').textContent = info.observaciones;
     } else {
-      document.getElementById('informacion-reactivo').innerHTML = 
+       document.getElementById('contenido').innerHTML = `
         <h1>Reactivo no encontrado</h1>
         <p>No se encontró información para "${nombreOriginal}".</p>
         <a href="#" class="volver" onclick="history.back(); return false;">⬅ Volver al Buscador</a>
-      ;
+      `;
     }
-</script>
+  </script>
 </body>
 </html>
-
+       
+     
