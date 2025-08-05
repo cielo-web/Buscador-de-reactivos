@@ -84,7 +84,6 @@
  <script>
   const params = new URLSearchParams(window.location.search);
   const nombreOriginal = params.get('nombre') || '';
-
   console.log("Nombre original recibido en URL:", nombreOriginal);
 
   function normalizar(texto) {
@@ -972,13 +971,10 @@ const nombreNormalizado = normalizar(nombreOriginal);
     };
 
 
-  const nombreOriginal = params.get('nombre') || '';
-const nombreNormalizado = normalizar(nombreOriginal);  // Declarado antes
-
 const claveCoincidente = Object.keys(datosReactivos).find(clave => {
   const claveNormalizada = normalizar(clave);
   console.log(`Comparando clave normalizada "${claveNormalizada}" con "${nombreNormalizado}"`);
-  return claveNormalizada === nombreNormalizado;  // Aquí accede sin problema
+  return claveNormalizada === nombreNormalizado;
 });
 
 
@@ -1007,6 +1003,7 @@ const claveCoincidente = Object.keys(datosReactivos).find(clave => {
 </html>
        
      
+
 
 
 
