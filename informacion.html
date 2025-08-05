@@ -93,7 +93,7 @@
                 .toLowerCase()
                 .trim();
     }
-
+const nombreNormalizado = normalizar(nombreOriginal); 
     
     const datosReactivos = {
       "1. pentanodiona": {
@@ -972,11 +972,15 @@
     };
 
 
-  const claveCoincidente = Object.keys(datosReactivos).find(clave => {
+  const nombreOriginal = params.get('nombre') || '';
+const nombreNormalizado = normalizar(nombreOriginal);  // Declarado antes
+
+const claveCoincidente = Object.keys(datosReactivos).find(clave => {
   const claveNormalizada = normalizar(clave);
   console.log(`Comparando clave normalizada "${claveNormalizada}" con "${nombreNormalizado}"`);
-  return claveNormalizada === nombreNormalizado;
+  return claveNormalizada === nombreNormalizado;  // Aquí accede sin problema
 });
+
 
   console.log("Clave coincidente encontrada:", claveCoincidente);
 
@@ -1003,6 +1007,7 @@
 </html>
        
      
+
 
 
 
