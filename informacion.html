@@ -982,7 +982,7 @@
 
 
   const nombreNormalizado = normalizar(nombreOriginal);
-  const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave).includes(nombreNormalizado);
+  const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave) === nombreNormalizado);
 
 const info = claveCoincidente ? datosReactivos[claveCoincidente] : null;
 
@@ -1006,3 +1006,4 @@ const info = claveCoincidente ? datosReactivos[claveCoincidente] : null;
 </html>
        
      
+
