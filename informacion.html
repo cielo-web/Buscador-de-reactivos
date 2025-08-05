@@ -93,10 +93,6 @@
                   .trim();
     }
 
-    const nombreNormalizado = normalizar(nombreOriginal);
-const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave) === nombreNormalizado);
-const reactivo = datosReactivos[claveCoincidente];
-
     const datosReactivos = {
       "1. pentanodiona": {
         nombreMostrar: "1. Pentanodiona",
@@ -983,6 +979,10 @@ const reactivo = datosReactivos[claveCoincidente];
 
 
     };
+
+    const nombreNormalizado = normalizar(nombreOriginal);
+const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave) === nombreNormalizado);
+const reactivo = datosReactivos[claveCoincidente];
     
     if (info) {
       document.getElementById('nombre-reactivo').textContent = = claveCoincidente || "Reactivo no encontrado";;
@@ -1001,3 +1001,4 @@ const reactivo = datosReactivos[claveCoincidente];
 </script>
 </body>
 </html>
+
