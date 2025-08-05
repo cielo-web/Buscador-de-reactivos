@@ -101,8 +101,6 @@
         analisis: "Para cromatografia",
         medida: "ml",
         stock: "1 frasco de 100 mL",
-        llegada: "Inmediata",
-        codigo: "123",
         frecuencia: "Semanal",
         observaciones: "Almacenar en refrigeración",
       },
@@ -968,7 +966,7 @@
        observaciones: "No manipular sin EPPS",
       },
 
-    "84. verde de bromocresol":": {
+    "84. verde de bromocresol": {
         nombreMostrar: "84. Verde de Bromocresol":",
         analisis: "Indicador Mixto",
         medida: "g",  
@@ -991,8 +989,6 @@
       document.getElementById('stock').textContent = info.stock;
       document.getElementById('observaciones').textContent = info.observaciones;
       document.getElementById('medida').textContent = info.medida;
-      document.getElementById('llegada').textContent = info.llegada;
-      document.getElementById('codigo').textContent = info.codigo;
       document.getElementById('frecuencia').textContent = info.frecuencia;
     } else {
       document.getElementById('contenido').innerHTML = `
@@ -1004,6 +1000,7 @@
   </script>
 </body>
 </html>
+
 
 
 
