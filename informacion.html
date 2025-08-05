@@ -972,13 +972,11 @@
     };
 
 
-  const nombreNormalizado = normalizar(nombreOriginal);
-  console.log("Nombre normalizado:", nombreNormalizado);
-
-  const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave).includes(nombreNormalizado));
-    console.log(`Comparando clave normalizada "${claveNormalizada}" con "${nombreNormalizado}"`);
-    return claveNormalizada === nombreNormalizado;
-  });
+  const claveCoincidente = Object.keys(datosReactivos).find(clave => {
+  const claveNormalizada = normalizar(clave);
+  console.log(`Comparando clave normalizada "${claveNormalizada}" con "${nombreNormalizado}"`);
+  return claveNormalizada === nombreNormalizado;
+});
 
   console.log("Clave coincidente encontrada:", claveCoincidente);
 
@@ -1005,6 +1003,7 @@
 </html>
        
      
+
 
 
 
