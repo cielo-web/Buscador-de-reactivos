@@ -81,15 +81,17 @@
     <a href="#" class="volver" onclick="history.back(); return false;">⬅ Volver al Buscador</a>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const nombreOriginal = params.get('nombre') || '';
+ <script>
+  const params = new URLSearchParams(window.location.search);
+  const nombreOriginal = params.get('nombre') || '';
 
-    function normalizar(texto) {
-      return texto.normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "")
-                  .toLowerCase()
-                  .trim();
+  console.log("Nombre original recibido en URL:", nombreOriginal);
+
+  function normalizar(texto) {
+    return texto.normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .trim();
     }
 
     
@@ -982,28 +984,38 @@
 
 
   const nombreNormalizado = normalizar(nombreOriginal);
-  const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave) === nombreNormalizado);
+  console.log("Nombre normalizado:", nombreNormalizado);
 
-const info = claveCoincidente ? datosReactivos[claveCoincidente] : null;
+  const claveCoincidente = Object.keys(datosReactivos).find(clave => {
+    const claveNormalizada = normalizar(clave);
+    console.log(`Comparando clave normalizada "${claveNormalizada}" con "${nombreNormalizado}"`);
+    return claveNormalizada === nombreNormalizado;
+  });
 
-    
-    if (info) {
-      document.getElementById('nombre-reactivo').textContent = info.nombreMostrar;
-      document.getElementById('analisis').textContent = info.analisis;
-      document.getElementById('medida').textContent = info.medida;
-      document.getElementById('stock').textContent = info.stock;
-      document.getElementById('frecuencia').textContent = info.frecuencia;
-      document.getElementById('observaciones').textContent = info.observaciones;
-    } else {
-       document.getElementById('contenido').innerHTML = `
-        <h1>Reactivo no encontrado</h1>
-        <p>No se encontró información para "${nombreOriginal}".</p>
-        <a href="#" class="volver" onclick="history.back(); return false;">⬅ Volver al Buscador</a>
-      `;
-    }
-  </script>
+  console.log("Clave coincidente encontrada:", claveCoincidente);
+
+  const info = claveCoincidente ? datosReactivos[claveCoincidente] : null;
+
+  if (info) {
+    console.log("Información del reactivo encontrada:", info);
+    document.getElementById('nombre-reactivo').textContent = info.nombreMostrar;
+    document.getElementById('analisis').textContent = info.analisis;
+    document.getElementById('medida').textContent = info.medida;
+    document.getElementById('stock').textContent = info.stock;
+    document.getElementById('frecuencia').textContent = info.frecuencia;
+    document.getElementById('observaciones').textContent = info.observaciones;
+  } else {
+    console.log("No se encontró información para el reactivo");
+    document.getElementById('contenido').innerHTML = `
+      <h1>Reactivo no encontrado</h1>
+      <p>No se encontró información para "${nombreOriginal}".</p>
+      <a href="#" class="volver" onclick="history.back(); return false;">⬅ Volver al Buscador</a>
+    `;
+  }
+</script>
 </body>
 </html>
        
      
+
 
