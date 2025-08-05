@@ -72,7 +72,7 @@
 </head>
 <body>
   <div class="contenedor" id="contenido">
-    <h1 id="tituloReactivo">Ficha del Reactivo</h1>
+    <h1 id="nombre-reactivo">Ficha del Reactivo</h1>
     <p><strong>Análisis:</strong> <span id="analisis"></span></p>
     <p><strong>Unidad de medida:</strong> <span id="medida"></span></p>
     <p><strong>Cantidad de stock recomendado:</strong> <span id="stock"></span></p>
@@ -94,6 +94,8 @@
     }
 
     const nombreNormalizado = normalizar(nombreOriginal);
+const claveCoincidente = Object.keys(datosReactivos).find(clave => normalizar(clave) === nombreNormalizado);
+const reactivo = datosReactivos[claveCoincidente];
 
     const datosReactivos = {
       "1. pentanodiona": {
@@ -107,7 +109,7 @@
         observaciones: "Almacenar en refrigeración",
       },
 
-     "3. acetaldehido": {
+    "3. acetaldehido": {
         nombreMostrar: "3. Acetaldehido",
         analisis: "Para Cromatografia",
         medida: "ml",
@@ -968,7 +970,7 @@
        observaciones: "No manipular sin EPPS",
       },
 
-    "84. verde de bromocresol": {
+    "84. verde de bromocresol":": {
         nombreMostrar: "84. Verde de Bromocresol":",
         analisis: "Indicador Mixto",
         medida: "g",  
@@ -980,30 +982,22 @@
       },
 
 
-      
     };
-
-    const info = datosReactivos[nombreNormalizado];
-
+    
     if (info) {
-      document.getElementById('tituloReactivo').textContent = `Ficha del reactivo: ${info.nombreMostrar}`;
+      document.getElementById('nombre-reactivo').textContent = = claveCoincidente || "Reactivo no encontrado";;
       document.getElementById('analisis').textContent = info.analisis;
       document.getElementById('stock').textContent = info.stock;
       document.getElementById('observaciones').textContent = info.observaciones;
       document.getElementById('medida').textContent = info.medida;
       document.getElementById('frecuencia').textContent = info.frecuencia;
     } else {
-      document.getElementById('contenido').innerHTML = `
+      document.getElementById('informacion-reactivo').innerHTML = 
         <h1>Reactivo no encontrado</h1>
         <p>No se encontró información para "${nombreOriginal}".</p>
         <a href="#" class="volver" onclick="history.back(); return false;">⬅ Volver al Buscador</a>
-      `;
+      ;
     }
-  </script>
+</script>
 </body>
 </html>
-
-
-
-
-
